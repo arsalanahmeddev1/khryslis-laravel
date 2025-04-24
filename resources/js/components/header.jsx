@@ -2,13 +2,12 @@ import React from "react"
 import { useContext } from "react"
 import ThemeContext from "../contexts/ThemeContext";
 import logo from "../assets/images/logo.png"
-import { Link } from "react-router-dom"
+import { Link, router } from "@inertiajs/react"
 import profile from "../assets/icons/profile.png"
 import { CiBrightnessUp } from "react-icons/ci"
 import { MdDarkMode } from "react-icons/md"
 import SearchBar from "./SearchBar";
 import { useAuth } from "../contexts/AuthContext";
-import { router } from "@inertiajs/react";
 
 const TopNavBar = ({ onMenuClick }) => {
   const handleLogout = () => {
@@ -60,7 +59,7 @@ const TopNavBar = ({ onMenuClick }) => {
             Log Out
           </button>
         ) : (
-          <Link to="" className="auth-link-wrapper">
+          <Link href="/login" className="auth-link-wrapper">
             <img src={profile} alt="Profile" />
             Log In
           </Link>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePage } from "@inertiajs/react";
 import { logo } from "../../assets/images";
 import { Link } from '@inertiajs/react';
@@ -49,6 +49,15 @@ const Login = () => {
     },
   ];
 
+  useEffect(() => {
+    if (errors.email) {
+      toast.error(errors.email.message);
+    }
+    if (errors.password) {
+      toast.error(errors.password.message);
+    }
+  }, [errors])
+
   return (
     <Layout>
 
@@ -60,21 +69,19 @@ const Login = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-y-3">
           {inputFields.map((field, index) => (
-            <input
-              key={index}
-              type={field.name === "password" ? "password" : "email"}
-              className="input-field !rounded-[60px]"
-              placeholder={field.placeholder}
-              {...register(field.name, { required: `${field.placeholder} is required` })}
-            />
-
+            <div className="" key={index}>
+              <input
+                type={field.name === "password" ? "password" : "email"}
+                className="input-field !rounded-[60px]"
+                placeholder={field.placeholder}
+                {...register(field.name, { required: `${field.placeholder} is required` })}
+              />
+              {errors[field.name] && (
+                <p className="text-sm text-red-600 mt-2">{errors[field.name].message}</p>
+              )}
+            </div>
           ))}
-          {errors.email && (
-            <p className="text-sm text-red-600">{errors.email.message}</p>
-          )}
-          {errors.email && (
-            <p className="text-sm text-red-600">{errors.email}</p>
-          )}
+
         </div>
         <br />
         <div className="flex justify-center">

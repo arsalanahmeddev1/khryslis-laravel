@@ -14,7 +14,7 @@ const Auth = ({ children }) => {
             </div>
           </div>
         </div>
-      </main >
+      </main>
     </AuthProvider>
   )
 }

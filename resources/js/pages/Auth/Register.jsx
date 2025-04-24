@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePage, router, Link } from '@inertiajs/react';
 import { logo } from "../../assets/images";
 import { useForm } from "react-hook-form";
 import Layout from '../../components/Layouts/Auth';
-
+import { toast } from 'react-toastify';
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -44,6 +44,13 @@ const Register = () => {
     },
   ];
 
+  useEffect(() => {
+    {errors.name && toast.error(errors.name?.message)}
+    {errors.email && toast.error(errors.email?.message)}
+    {errors.password && toast.error(errors.password?.message)}
+    {errors.confirm_password && toast.error(errors.confirm_password?.message)}
+  },[errors])
+
   return (
     <Layout>
       <img
@@ -54,28 +61,25 @@ const Register = () => {
       <form method='POST' onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-y-3">
           {inputFields.map((field, index) => (
-            <input
-              key={index}
-              type={field.type}
-              className="input-field !rounded-[60px]"
-              placeholder={field.placeholder}
-              {...register(field.name, {
-                required: `${field.placeholder} is required`,
-              })}
-            />
-          ))}
-
-          {/* Client-side validation messages */}
-          {Object.keys(errors).map((key) => (
-            <p key={key} className="text-sm text-red-600">{errors[key]?.message}</p>
-          ))}
-
-          {/* Server-side validation messages */}
-          {Object.keys(serverErrors).map((key) => (
-            <p key={key} className="text-sm text-red-600">{serverErrors[key]}</p>
+            <div className="" key={index}>
+              <input
+                type={field.type}
+                className="input-field !rounded-[60px]"
+                placeholder={field.placeholder}
+                {...register(field.name, {
+                  required: `${field.placeholder} is required`,
+                })}
+              />
+              {errors[field.name] && (
+                <p className="text-sm text-red-600 mt-2">{errors[field.name]?.message}</p>
+              )
+              }
+              {serverErrors[field.name] && (
+                <p className="text-sm text-red-600 mt-2">{errors[field.name]}</p>
+              )}
+            </div>
           ))}
         </div>
-
         <br />
         <div className="flex justify-center">
           <button

@@ -147,7 +147,6 @@ return [
         Features::registration(),
         Features::resetPasswords(),
         Features::emailVerification(),
-        // Add more features as needed
     ],
 
 ];
