@@ -1,24 +1,31 @@
-import React from 'react';
-import { Link } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react'
 
-export default function VerifyEmail() {
+export default function VerifyEmail({ status }) {
+    const { post, processing } = useForm({});
+
+    const submit = (e) => {
+        e.preventDefault();
+        post('/email/verification-notification');
+    };
+
     return (
-        <div className="text-center py-20">
-            <h1 className="text-2xl font-bold">Verify your email</h1>
-            <p className="mt-4 text-gray-600">
-                Please check your inbox for a verification link.
+        <div>
+            <h1>Email Verification</h1>
+
+            {status === 'verification-link-sent' && (
+                <p className="text-green-600">
+                    A new verification link has been sent to your email address.
+                </p>
+            )}
+
+            <p>
+                Thanks for signing up! Before getting started, please verify your email by clicking on
+                the link we just emailed to you. If you didn’t receive the email, we will gladly send you another.
             </p>
-            <p className="mt-2">
-                Didn’t get it?{' '}
-                <Link
-                    href="/email/verification-notification"
-                    method="post"
-                    as="button"
-                    className="text-blue-600 underline"
-                >
-                    Resend link
-                </Link>
-            </p>
+
+            <form onSubmit={submit}>
+                <button disabled={processing}>Resend Verification Email</button>
+            </form>
         </div>
     );
 }

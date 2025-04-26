@@ -6,30 +6,25 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-// Resend verification email
-Route::post('/email/verification-notification', function () {
-    request()->user()->sendEmailVerificationNotification();
-    return back()->with('status', 'verification-link-sent');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-// Guest routes
-Route::middleware('guest')->group(function () {
-    Route::get('/register', [RegisterController::class, 'show']);
-    Route::post('/register', [RegisterController::class, 'store']);
-    Route::get('/login', [LoginController::class, 'show'])->name('login');
-    Route::post('/login', [LoginController::class, 'store']);
-});
 
 // Authenticated and verified routes
+Route::get('/login', [LoginController::class, 'show'])->name('login');
+Route::post('/login', [LoginController::class, 'store']);
+Route::get('/register', [RegisterController::class, 'show'])->name('register');
+Route::post('/register', [RegisterController::class, 'store']);
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('Home');
-    });
+    
+
+    Route::get('/about', function () {
+        return Inertia::render('About');
+    })->name('about');
 });
 
-Route::get('/about', function () {
-    return Inertia::render('About');
-});
+Route::get('/', function () {
+    return Inertia::render('Home');
+})->name('home');
+
 // Authenticated routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', function () {
@@ -37,12 +32,10 @@ Route::middleware('auth')->group(function () {
         request()->session()->invalidate();
         request()->session()->regenerateToken();
         return redirect('/login');
-    });
+    })->name('logout');
 });
 
-// Public routes
-
-
-Route::get('/', function () {
-    return Inertia::render('Home');
+Route::get('/register-page', function () {
+    return Inertia::render('Auth.Register');
 });
+
